@@ -155,7 +155,7 @@ class GetPrice(object):
         # print(self.id_name['13580595590'])
         # print(self.field_dic_list)
 
-    ## noinspection SpellCheckingInspection
+    # noinspection SpellCheckingInspection
     def crawl_data(self):  # 获取数据
         # 获取总数
         self.total_num = int(self.initial_table[0][3][5])
@@ -334,7 +334,8 @@ class GetPrice(object):
                         for p, price_field in enumerate(price_field_list):
                             if price_field in data_article_price:
                                 remark_list.append(price_field_list_t[p])
-                        if len(remark_list) > 0: field_value = '|'.join(remark_list)
+                        if len(remark_list) > 0:
+                            field_value = '|'.join(remark_list)
                     elif field == "日期":
                         field_value = data_article_date
                     elif field == "评价数|值数":
@@ -444,21 +445,21 @@ class GetPrice(object):
     def hdr_cart(self):
         # 1.获取更新价格
         # 打开
-        driver = self.open_mark(self.cookies_oj,True)
+        driver = self.open_mark(self.cookies_oj, True)
         # 进入
-        # try:
-        pass
-        self.into_mark(driver)
-        # 获取
-        self.get_mark(driver)
-        # 2.写入对比价格，对比出价格
-        self.cart_analysis()
-        # except Exception as info:
-        #     print('未知错误 %s' % info)
-        #     self.server_sa('大哥，快去看看服务器挂啦~~' + common.now_time('%H%M'))
-        #     driver.quit()
-        #     # self.driver_tb.quit()
-        #     sys.exit()
+        try:
+            pass
+            self.into_mark(driver)
+            # 获取
+            self.get_mark(driver)
+            # 2.写入对比价格，对比出价格
+            self.cart_analysis()
+        except Exception as info:
+            print('未知错误 %s' % info)
+            self.server_sa('大哥，快去看看服务器挂啦~~' + common.now_time('%H%M'))
+            # driver.quit()
+            # self.driver_tb.quit()
+            # sys.exit()
         # 3.提交购买锁单
         # 4.写入更新提交
         # 退出
@@ -646,9 +647,9 @@ class GetPrice(object):
                 if i[0] not in self.send_value_save_id:
                     send_info = i[1] + "，" + common.now_time('%H%M')
                     # 发邮件
-                    # common.send_mail_tmp("13580595590@139.com", '13580595590@139.com', 'Qazqaz123', i[1])
+                    common.send_mail_tmp("13580595590@139.com", '13580595590@139.com', 'Qazqaz123', i[1])
                     # 发微信
-                    # self.server_sa('购，' + send_info)
+                    self.server_sa('购，' + send_info)
                     # 发短信
                     print('需发送:【购物车提醒】：%s' % i[1])
                     # 记录已发送_id
@@ -678,7 +679,7 @@ class GetPrice(object):
                 cookies_tb = eval(account[7])
                 # print(cookies_tb[1])
                 # 打开新建浏览器
-                self.driver_tb = self.open_mark(cookies_tb,False)
+                self.driver_tb = self.open_mark(cookies_tb, False)
                 # 商品购买
                 for i, bug_good in enumerate(bug_goods_list):
                     # 【获取购买次数，和每次个数,购买总数】
@@ -766,7 +767,8 @@ class GetPrice(object):
             # driver.find_element_by_xpath("//input[@id='add-to-cart-button']").click()
             # /html[1]/body[1]/div[1]//div[1]//form[1]/div[1]/span[1]/span[1]/span[1]
             # driver.find_element_by_xpath("//span//div[@class='displayAddressDiv']").click()
-            driver.find_element_by_xpath("/html[1]/body[1]/div[1]//div[1]//form[1]/div[1]/span[1]/span[1]/input[1]").click()
+            driver.find_element_by_xpath(
+                "/html[1]/body[1]/div[1]//div[1]//form[1]/div[1]/span[1]/span[1]/input[1]").click()
             time.sleep(3)
             print('加入购物车')
             # 进入结算中心
@@ -878,7 +880,8 @@ class GetPrice(object):
                     print("当前帐号地址无")
                     return "帐号地址无"
             # 选择人id
-            if name_user_id_true in name_user_id: name_user_id_m = True
+            if name_user_id_true in name_user_id:
+                name_user_id_m = True
             if not name_user_id_m:
                 time.sleep(3)
                 driver.implicitly_wait(8)
@@ -890,7 +893,7 @@ class GetPrice(object):
                 driver.implicitly_wait(8)
                 driver.find_element_by_xpath("//span[@class='a-dropdown-prompt']").click()
                 time.sleep(3)
-                driver.implicitly_wait(8) # /html[1]/body[1]/div[12]/div[1]/div[2]/ul[1]/li/a[1]
+                driver.implicitly_wait(8)  # /html[1]/body[1]/div[12]/div[1]/div[2]/ul[1]/li/a[1]
                 id_list_x = driver.find_elements_by_xpath("/html[1]/body[1]//div[1]/div[2]/ul[1]//a[1]")
                 # print(id_list_x)
                 id_list_test_x = [i.text for i in id_list_x]
@@ -935,9 +938,10 @@ class GetPrice(object):
             #  //input[@name='forcePlaceOrder']
             # 判断能购买的个数。 再判断需买买的次数
             # if use_num >= 2: break
-            if use_num >= times: break
+            if use_num >= times:
+                break
 
-    def open_mark(self, cookies_oj,open_tem=None):
+    def open_mark(self, cookies_oj, open_tem=None):
         options = Options()
         # open_tem = True
         if open_tem:
