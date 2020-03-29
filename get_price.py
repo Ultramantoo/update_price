@@ -23,7 +23,6 @@ from selenium.webdriver.chrome.options import Options
 3.爬取数据信息
 4.分析数据信息
 5.写入归档数据信息
-
 后期
 增加 优惠价格判断
 增加 优惠价格微信邮件短信提醒
@@ -34,7 +33,6 @@ from selenium.webdriver.chrome.options import Options
     注意自动判断否海淘额度
     自动判断商品价格是否一致
     自动判断身份证与收货人名一致
-
 2020-1-18
 1. 增加购买记录与发送记录 【急】 ok
 2. 测试多线程购买【cookies】 是否被通用 暂 先稳定性
@@ -42,9 +40,7 @@ from selenium.webdriver.chrome.options import Options
 4. 增加 额度查询验证 ok
 5. 测试一轮完整流程后，初步上线，测试稳定性！！ 【急】 ok
 6. 先发送提醒，再自动锁单 【急】 ok
-
 """
-
 
 # noinspection PyBroadException,PyAttributeOutsideInit,SpellCheckingInspection
 class GetPrice(object):

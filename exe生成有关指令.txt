@@ -1,0 +1,70 @@
+﻿
+# 生成指令
+# 主程序
+pyinstaller -F -i tubiao\10201.ico -n plan_main-1.37 plan_main.py
+# 获取小区
+pyinstaller -F -i tubiao\10201.ico -n getcell_main-1.32 a02_getcell\getcell_main.py
+# 回单确认
+pyinstaller -F -i tubiao\10201.ico -n affirm_main-1.33 a01_affirm\affirm_main.py
+# 提前实施完成
+pyinstaller -F -i tubiao\10201.ico -n ahead_main-1.32 a03_ahead\ahead_main.py
+# 人工评估
+pyinstaller -F -i tubiao\10201.ico -n labour_main-1.61 a04_labour\labour_main.py
+
+# get_cell_plus
+pyinstaller -F -i tubiao\Funny24.ico -n get_cell_plus-2.51 a05_other\a01_getcell_thread\getcell_thread.py
+# get_ranking
+pyinstaller -F -i tubiao\Funny24.ico -n get_ranking-2.1 a05_other\a02_get_ranking\get_ranking.py
+# affirm_plus
+pyinstaller -F -i tubiao\Funny24.ico -n affirm_plus-2.1 a05_other\a04_affirm_plus\order_affirm.py
+# get_rtmw
+pyinstaller -F -i tubiao\Funny24.ico -n get_rtmw-2.1 a05_other\a05_get_rtmw\get_rtmw.py
+# order_plus
+pyinstaller -F -i tubiao\Funny24.ico -n order_plus-2.12 order_main.py
+# send_orders/deal_send
+pyinstaller -F -i tubiao\Funny24.ico -n send_orders-2.1 a05_other\a07_send_orders\send_orders.py
+pyinstaller -F -i tubiao\Funny24.ico -n deal_send-2.1 a05_other\a07_send_orders\deal_send.py
+# get_price
+pyinstaller -F -i tubiao\Funny24.ico -n get_price-1.26 get_price.py
+
+笔记本
+pyinstaller -F -i tubiao\Funny24.ico -n order_plus-2.1 order_main.py
+
+台式电脑
+pyinstaller -F -i tubiao\Funny24.ico -n order_plus-1.65 order_main.py -p F:\pycharm\my_order\venv\Lib\site-packages
+
+
+
+附参数集合：
+输入参数的含义
+-c 使用控制台，无窗口
+-D 创建一个目录，里面包含exe以及其他一些依赖性文件
+-F 表示生成单个可执行文件
+-w 表示去掉控制台窗口，这在GUI界面时非常有用。不过如果是命令行程序的话那就把这个选项删除吧！
+-p 表示你自己自定义需要加载的类路径，一般情况下用不到
+-i 表示可执行文件的图标
+
+pycharm 最常用的快捷键
+１、快速找文件
+Ctrl + E  打开访问过的文件
+Ctrl + Shift + E 打开编辑过的文件
+2、万能搜所
+Shift 两下
+3、历史粘贴版　Ctrl + Shift + V
+4、智能提示/导包　Alt + Enter
+5. 任意位置换行　Shift + Enter
+6、向下复制当前行　Ctrl + D
+7、更多快捷键请享用：
+Ctrl + F/R     查找替换
+Ctrl + Y 　　删除当前行
+Ctrl + / 　　快速在本行行首插入“#”，对单行行或选中多行进行注释（行尾注释不能采用此快捷键组合）很多软件都使用此快捷键进行注释
+Ctrl + Shift + F10　　初次run当前程序
+Ctrl + Shift + L　　格式化代码 PEP8
+Alt + 1 　　关闭tab标签
+Alt + 4　　关闭运行结果
+Alt + Enter　　快速import / insert
+Shift + F6　　重命名变量名/文件名
+Shift + F10　　run当前程序(非初次)
+Shift + Tab　　对单行或选中多行撤销回退一个tab
+Shift + Enter　　任意位置换行(快速在当前行下创建一个空行)
+Shift + Alt + ↑/↓　　向上/向下移动任意行
