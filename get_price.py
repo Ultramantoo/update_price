@@ -191,6 +191,7 @@ class GetPrice(object):
             # print(son_dic)
             data_empty = son_dic['error_msg']
             if data_empty == '数据为空':
+                # 【容易出错地方】
                 common.errorbox("返回数据为：%s ,退出" % data_empty)
                 sys.exit()
             self.data_dic = son_dic['data']
@@ -689,7 +690,7 @@ class GetPrice(object):
                     # 每次个数
                     every_one = int(5000 / float(old_price))
                     print("每次个数：%s" % every_one)
-                    get_max = 8
+                    get_max = 10
                     if every_one > get_max:
                         every_one = get_max
                         # self.max_num = 8
@@ -736,8 +737,8 @@ class GetPrice(object):
             if use_num == 0:
                 self.max_num = len(option_list)
                 # self.max_num = 2
-                if self.max_num > 7:
-                    self.max_num = 8
+                if self.max_num > 9:
+                    self.max_num = 10
                     # self.max_num = 3
                 if self.max_num <= every_one:
                     every_one_true = self.max_num
@@ -806,7 +807,7 @@ class GetPrice(object):
             # 使用后额度
             credit_update = credit_all - credit_out
             # 如果默认可用
-            if name_user in goods_ren_list and credit_update > 0:
+            if name_user == goods_ren_list[0] and credit_update > 0:
                 name_user_m = True
                 name_user_true = name_user
                 name_user_id_true = self.id_number[name_user_true]
