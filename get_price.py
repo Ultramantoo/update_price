@@ -10,6 +10,9 @@ import schedule
 import time
 import re
 import csv
+import base64
+
+from PIL import Image
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -40,6 +43,13 @@ from selenium.webdriver.chrome.options import Options
 4. 增加 额度查询验证 ok
 5. 测试一轮完整流程后，初步上线，测试稳定性！！ 【急】 ok
 6. 先发送提醒，再自动锁单 【急】 ok
+
+++++++++++++++++
+2020031
+1、自动更新额度
+2、多线程购买
+3、返利页面购买
+4、更高级的定时任务
 """
 
 # noinspection PyBroadException,PyAttributeOutsideInit,SpellCheckingInspection
@@ -137,6 +147,8 @@ class GetPrice(object):
         # 身份证信息dic
         self.id_number = {i[1]: i[2][-4:] for i in self.initial_table[8]}
         # print(self.id_number)
+        self.id_number_list = [i[2] for i in self.initial_table[8]][1:]
+        self.name_list = [i[1] for i in self.initial_table[8]][1:]
         # 初始 额度信息dic
         self.id_credit = {i[1]: int(i[4]) for i in self.initial_table[8][1:]}
         # print(self.id_credit)
@@ -150,6 +162,67 @@ class GetPrice(object):
             app.quit()
         # print(self.id_name['13580595590'])
         # print(self.field_dic_list)
+
+    def limit_check(self):
+        login_url = 'https://app.singlewindow.cn/ceb2pubweb/sw/personalAmount'
+        # image_url = 'https://app.singlewindow.cn/ceb2pubweb/verifyCode/creator?timestamp='
+        get_url = 'https://app.singlewindow.cn/ceb2pubweb/limit/outTotalAmount'
+        headers = {
+            "Referer": "https://app.singlewindow.cn/ceb2pubweb/sw/personalAmount",
+            "Origin": "https://app.singlewindow.cn",
+            "Host": "app.singlewindow.cn",
+            "Cookie": "JSESSIONID=0fddcefd-6dc0-4204-8886-af6a7cf00e34",
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+            "Accept-Language": "zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6",
+            # "Content-Length": "785",
+            "Connection": "keep-alive",
+            "Accept-Encoding": "gzip, deflate, br",
+            "Accept": "image/webp,image/apng,image/*,*/*;q=0.8",
+            "X-Requested-With": "XMLHttpRequest",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"
+        }
+            # 0.获取列表
+        timestamp = int(round(time.time() * 1000))
+        print(timestamp)
+        image_url = 'https://app.singlewindow.cn/ceb2pubweb/verifyCode/creator?timestamp=' + str(timestamp)
+        for j, num_id in enumerate(self.id_number_list):
+            # 加密身份证
+            str_en = base64.b64encode(num_id.encode('utf-8'))
+            num_id_ma = str_en.decode("utf-8")
+            print(self.name_list[j])
+            # print(num_id_ma)
+            # 1.进入主页，获取验证码 打开 关闭 input
+            session = requests.Session()
+            session.get(url=login_url, headers=headers)
+            # cookies = request.cookies.get_dict()
+            # 验证码请求
+            while True:
+                code_resp = session.get(image_url, headers=headers)
+                with open(r'_tmp\code_resp.png', "wb") as f:
+                    f.write(code_resp.content)
+                # 展示图片e7458ad22ddbb76aa048ed4161768c6ae3e4bcf771ca422f9536fcc7fa1c69ec114121f8244d110e5aa8e8d5260fd58b
+                images = Image.open(r'_tmp\code_resp.png')
+                images.show()
+                # 手动输入结果
+                info_input = input('输入验证码：')
+                # 2.发送请求,获取返回结果
+                post_data = 'verifyCode='+ info_input +'&personalName=cXE%3D&idNumber='+ num_id_ma +'&sessionKey=verifyCode&queryCodeHidden=cebpub'
+                # print(post_data)
+                rt = session.post(get_url, data=post_data, headers=headers)
+                # print(rt.content.decode())
+                text_dic = json.loads(rt.content.decode())
+                # print(text_dic)
+                # 判断获取结果：
+                code = text_dic['code']
+                if code =='40001':
+                    print('验证码输入错误')
+                    self.wb_info.sheets[8].range('E' + str(2 + j)).value = '验证码输入错误'
+                else:
+                    innerbalance = text_dic['result']['innerbalance']
+                    print(innerbalance)
+                    # 3.更新写入excel
+                    self.wb_info.sheets[8].range('E' + str(2 + j)).value = innerbalance
+                    break
 
     # noinspection SpellCheckingInspection
     def crawl_data(self):  # 获取数据
@@ -1055,27 +1128,31 @@ class GetPrice(object):
 
     @common.use_times
     def main(self):
-        # sys.exit()
-        # 3.爬取数据信息，分析数据
-        print("当前没每隔:%s 分钟刷新一次" % int(self.initial_table[0][7][5]))
-        if self.initial_table[0][3][6] == '是':
-            self.crawl_data()
-        if self.initial_table[0][1][6] == '是':
-            self.hdr_cart()
-        # 4.分析数据信息
-        # 5.写入归档数据信息
-        # 定时刷新
-        if self.initial_table[0][1][5] == '实时监控':
+        modes =1
+        if modes == 1:
+            self.limit_check()
+        else:
+            # sys.exit()
+            # 3.爬取数据信息，分析数据
+            print("当前没每隔:%s 分钟刷新一次" % int(self.initial_table[0][7][5]))
             if self.initial_table[0][3][6] == '是':
-                minutes_time = int(self.initial_table[0][7][5])
-                # print(common.now_time('%Y%m%d %T'))
-                schedule.every(minutes_time).minutes.do(self.crawl_data)
+                self.crawl_data()
             if self.initial_table[0][1][6] == '是':
-                minutes_time2 = int(self.initial_table[0][9][5])
-                schedule.every(minutes_time2).minutes.do(self.hdr_cart)
-            while True:
-                schedule.run_pending()
-                time.sleep(2)
+                self.hdr_cart()
+            # 4.分析数据信息
+            # 5.写入归档数据信息
+            # 定时刷新
+            if self.initial_table[0][1][5] == '实时监控':
+                if self.initial_table[0][3][6] == '是':
+                    minutes_time = int(self.initial_table[0][7][5])
+                    # print(common.now_time('%Y%m%d %T'))
+                    schedule.every(minutes_time).minutes.do(self.crawl_data)
+                if self.initial_table[0][1][6] == '是':
+                    minutes_time2 = int(self.initial_table[0][9][5])
+                    schedule.every(minutes_time2).minutes.do(self.hdr_cart)
+                while True:
+                    schedule.run_pending()
+                    time.sleep(2)
 
 
 if __name__ == "__main__":
