@@ -171,7 +171,7 @@ class GetPrice(object):
             "Referer": "https://app.singlewindow.cn/ceb2pubweb/sw/personalAmount",
             "Origin": "https://app.singlewindow.cn",
             "Host": "app.singlewindow.cn",
-            "Cookie": "JSESSIONID=0fddcefd-6dc0-4204-8886-af6a7cf00e34",
+            # "Cookie": "JSESSIONID=0fddcefd-6dc0-4204-8886-af6a7cf00e34",
             "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
             "Accept-Language": "zh-CN,zh;q=0.9,ja;q=0.8,en;q=0.7,zh-TW;q=0.6",
             # "Content-Length": "785",
@@ -182,9 +182,9 @@ class GetPrice(object):
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"
         }
             # 0.获取列表
-        timestamp = int(round(time.time() * 1000))
-        print(timestamp)
-        image_url = 'https://app.singlewindow.cn/ceb2pubweb/verifyCode/creator?timestamp=' + str(timestamp)
+        session = requests.Session()
+        session.get(url=login_url, headers=headers)
+        # cookies = request.cookies.get_dict()
         for j, num_id in enumerate(self.id_number_list):
             # 加密身份证
             str_en = base64.b64encode(num_id.encode('utf-8'))
@@ -192,14 +192,15 @@ class GetPrice(object):
             print(self.name_list[j])
             # print(num_id_ma)
             # 1.进入主页，获取验证码 打开 关闭 input
-            session = requests.Session()
-            session.get(url=login_url, headers=headers)
-            # cookies = request.cookies.get_dict()
             # 验证码请求
             while True:
+                timestamp = int(round(time.time() * 1000))
+                # print(timestamp)
+                image_url = 'https://app.singlewindow.cn/ceb2pubweb/verifyCode/creator?timestamp=' + str(timestamp)
                 code_resp = session.get(image_url, headers=headers)
                 with open(r'_tmp\code_resp.png', "wb") as f:
                     f.write(code_resp.content)
+                time.sleep(1)
                 # 展示图片e7458ad22ddbb76aa048ed4161768c6ae3e4bcf771ca422f9536fcc7fa1c69ec114121f8244d110e5aa8e8d5260fd58b
                 images = Image.open(r'_tmp\code_resp.png')
                 images.show()
@@ -207,7 +208,7 @@ class GetPrice(object):
                 info_input = input('输入验证码：')
                 # 2.发送请求,获取返回结果
                 post_data = 'verifyCode='+ info_input +'&personalName=cXE%3D&idNumber='+ num_id_ma +'&sessionKey=verifyCode&queryCodeHidden=cebpub'
-                # print(post_data)
+                print(post_data)
                 rt = session.post(get_url, data=post_data, headers=headers)
                 # print(rt.content.decode())
                 text_dic = json.loads(rt.content.decode())
@@ -220,7 +221,7 @@ class GetPrice(object):
                 else:
                     innerbalance = text_dic['result']['innerbalance']
                     print(innerbalance)
-                    # 3.更新写入excel
+                    # 3.更新写入excel淦春
                     self.wb_info.sheets[8].range('E' + str(2 + j)).value = innerbalance
                     break
 
