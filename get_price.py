@@ -718,9 +718,9 @@ class GetPrice(object):
                 if i[0] not in self.send_value_save_id:
                     send_info = i[1] + "，" + common.now_time('%H%M')
                     # 发邮件
-                    common.send_mail_tmp("13580595590@139.com", '13580595590@139.com', 'Qazqaz123', i[1])
+                    # common.send_mail_tmp("13580595590@139.com", '13580595590@139.com', 'Qazqaz123', i[1])
                     # 发微信
-                    self.server_sa('购，' + send_info)
+                    # self.server_sa('购，' + send_info)
                     # 发短信
                     print('需发送:【购物车提醒】：%s' % i[1])
                     # 记录已发送_id
@@ -746,11 +746,11 @@ class GetPrice(object):
             for ik, account in enumerate(bug_account_list):
                 # 进入到购买
                 # 配置 cookies 帐号 密码 通信信息额度
-                # print(account[7])
-                cookies_tb = eval(account[7])
+                # print(account)
+                # cookies_tb = eval(account[7])
                 # print(cookies_tb[1])
                 # 打开新建浏览器
-                self.driver_tb = self.open_mark(cookies_tb, False)
+                self.driver_tb = self.open_mark(cookies_oj=None, open_tem=None)
                 # 商品购买
                 for i, bug_good in enumerate(bug_goods_list):
                     # 【获取购买次数，和每次个数,购买总数】
@@ -783,10 +783,36 @@ class GetPrice(object):
         times = 0
         yu_num = 0
         every_one_true = every_one
+        # 帐号登录
+        login_url = 'https://www.amazon.cn/ap/signin?_encoding=UTF8&openid.assoc_handle=anywhere_v2_cn&openid.claimed_id=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.identity=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0%2Fidentifier_select&openid.mode=checkid_setup&openid.ns=http%3A%2F%2Fspecs.openid.net%2Fauth%2F2.0&openid.ns.pape=http%3A%2F%2Fspecs.openid.net%2Fextensions%2Fpape%2F1.0&openid.pape.max_auth_age=0&openid.return_to=https%3A%2F%2Fwww.amazon.cn%2F%3Fie%3DUTF8%26ref_%3Dnavm_hdr_signin'
+        """
+        //input[@id='ap_email_login']
+        //span[@id='continue']//input[@id='continue']
+        -----
+        //input[@id='ap_password']
+        //input[@id='signInSubmit']
+        """
+        driver.get(login_url)
+        time.sleep(0.5)
+        driver.implicitly_wait(15)
+        driver.find_element_by_id("ap_email_login").clear()
+        driver.find_element_by_id("ap_email_login").send_keys(account[0])
+        time.sleep(0.5)
+        driver.implicitly_wait(15)
+        driver.find_element_by_xpath("//span[@id='continue']//input[@id='continue']").click()
+        time.sleep(0.5)
+        driver.implicitly_wait(15)
+        driver.find_element_by_id("ap_password").clear()
+        driver.find_element_by_id("ap_password").send_keys(account[1])
+        time.sleep(0.5)
+        driver.implicitly_wait(15)
+        time.sleep(0.5)
+        driver.implicitly_wait(15)
+        driver.find_element_by_xpath("//input[@id='signInSubmit']").click()
         while True:
             driver.get(link)
             # 价格匹配
-            time.sleep(3)
+            time.sleep(1)
             driver.implicitly_wait(30)
             now_price_tmp = driver.find_element_by_xpath("//span[@id='priceblock_ourprice']").text
             now_price = "{:.2f}".format(float(now_price_tmp.replace('￥', "").replace(',', "").replace(' ', "")))
@@ -993,12 +1019,12 @@ class GetPrice(object):
                     pass
                 # //span[@id='a-autoid-0']//input[@class='a-button-input']
             # 定单提交 //span[@id='placeYourOrder']//input[@name='placeYourOrder1']
-            time.sleep(2)
+            time.sleep(1)
             driver.implicitly_wait(30)
             driver.find_element_by_xpath("//span[@id='placeYourOrder']//input[@name='placeYourOrder1']").click()
             # 判断身份证息信是否正确
             # 判断是否需要重复下单
-            time.sleep(3)
+            time.sleep(1)
             driver.implicitly_wait(8)
             try:
                 driver.find_element_by_xpath("//input[@name='forcePlaceOrder']").click()
@@ -1012,10 +1038,12 @@ class GetPrice(object):
             if use_num >= times:
                 break
 
-    def open_mark(self, cookies_oj, open_tem=None):
+    def open_mark(self, cookies_oj=None, open_tem=None):
         options = Options()
         # open_tem = True
-        if open_tem:
+        # 【【【【获取cookies】】】
+        get_cookies = 0
+        if open_tem and get_cookies ==0:
             prefs = {"profile.managed_default_content_settings.images": 2}
             options.add_experimental_option("prefs", prefs)
 
@@ -1037,15 +1065,19 @@ class GetPrice(object):
         # driver.add_cookie(cookie_dic)
         driver.get('https://www.amazon.cn/gp/aw/d/B07GP1GW25')
 
-        # while True:
-        #     time.sleep(25)
-        #     tb_cookies  = driver.get_cookies()
-        #     print(tb_cookies)
+        if get_cookies ==1:
+            while True:
+                tb_cookies  = driver.get_cookies()
+                print(tb_cookies)
+                time.sleep(8)
         # return driver
         # 注入 cookies
-        for cookie in cookies_oj:
-            cookies = {"name": cookie['name'], "value": cookie['value']}
-            driver.add_cookie(cookies)
+        if cookies_oj is None:
+            pass
+        else:
+            for cookie in cookies_oj:
+                cookies = {"name": cookie['name'], "value": cookie['value']}
+                driver.add_cookie(cookies)
         return driver
 
     @staticmethod
@@ -1129,7 +1161,7 @@ class GetPrice(object):
 
     @common.use_times
     def main(self):
-        modes =1
+        modes =0
         if modes == 1:
             self.limit_check()
         else:
