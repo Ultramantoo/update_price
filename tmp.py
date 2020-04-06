@@ -10,6 +10,7 @@ print(str_en.decode("utf-8"))
 
 
 
+
 """
 0.获取列表
 1.进入主页，获取验证码 打开 关闭 input

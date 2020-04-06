@@ -718,9 +718,9 @@ class GetPrice(object):
                 if i[0] not in self.send_value_save_id:
                     send_info = i[1] + "，" + common.now_time('%H%M')
                     # 发邮件
-                    # common.send_mail_tmp("13580595590@139.com", '13580595590@139.com', 'Qazqaz123', i[1])
+                    common.send_mail_tmp("13580595590@139.com", '13580595590@139.com', 'Qazqaz123', i[1])
                     # 发微信
-                    # self.server_sa('购，' + send_info)
+                    self.server_sa('购，' + send_info)
                     # 发短信
                     print('需发送:【购物车提醒】：%s' % i[1])
                     # 记录已发送_id
@@ -1043,7 +1043,8 @@ class GetPrice(object):
         # open_tem = True
         # 【【【【获取cookies】】】
         get_cookies = 0
-        if open_tem and get_cookies ==0:
+        open_tes = False
+        if (open_tem and get_cookies ==0) or open_tes:
             prefs = {"profile.managed_default_content_settings.images": 2}
             options.add_experimental_option("prefs", prefs)
 
@@ -1051,6 +1052,10 @@ class GetPrice(object):
         options.add_experimental_option('mobileEmulation', mobile_emulation)
         options.add_argument('--ignore-certificate-errors')
         options.add_argument('--ignore-ssl-errors')
+        # 设置多用户
+        # options.add_argument(r'–user-data-dir=C:\Users\Administrator\AppData\Local\Google\Chrome\User Data')
+        # options.add_argument('–profile-directory=Profile 3')
+
         if self.hide_win == '是':
             show_go = True
         else:
@@ -1063,8 +1068,6 @@ class GetPrice(object):
         driver = webdriver.Chrome(options=options)
         driver.maximize_window()
         # driver.add_cookie(cookie_dic)
-        driver.get('https://www.amazon.cn/gp/aw/d/B07GP1GW25')
-
         if get_cookies ==1:
             while True:
                 tb_cookies  = driver.get_cookies()
@@ -1075,6 +1078,7 @@ class GetPrice(object):
         if cookies_oj is None:
             pass
         else:
+            driver.get('https://www.amazon.cn/gp/aw/d/B07GP1GW25')
             for cookie in cookies_oj:
                 cookies = {"name": cookie['name'], "value": cookie['value']}
                 driver.add_cookie(cookies)
