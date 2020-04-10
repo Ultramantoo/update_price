@@ -866,7 +866,7 @@ class GetPrice(object):
             # driver.find_element_by_xpath("//span//div[@class='displayAddressDiv']").click()
             driver.find_element_by_xpath(
                 "/html[1]/body[1]/div[1]//div[1]//form[1]/div[1]/span[1]/span[1]/input[1]").click()
-            time.sleep(3)
+            time.sleep(2)
             print('加入购物车')
             # 进入结算中心
             driver.implicitly_wait(30)
@@ -1165,7 +1165,7 @@ class GetPrice(object):
 
     @common.use_times
     def main(self):
-        modes =0
+        modes =1
         if modes == 1:
             self.limit_check()
         else:
