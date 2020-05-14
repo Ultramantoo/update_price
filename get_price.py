@@ -52,6 +52,7 @@ from selenium.webdriver.chrome.options import Options
 4、更高级的定时任务
 """
 
+
 # noinspection PyBroadException,PyAttributeOutsideInit,SpellCheckingInspection
 class GetPrice(object):
     def __init__(self):
@@ -181,7 +182,7 @@ class GetPrice(object):
             "X-Requested-With": "XMLHttpRequest",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.149 Safari/537.36"
         }
-            # 0.获取列表
+        # 0.获取列表
         session = requests.Session()
         session.get(url=login_url, headers=headers)
         # cookies = request.cookies.get_dict()
@@ -207,7 +208,7 @@ class GetPrice(object):
                 # 手动输入结果
                 info_input = input('输入验证码：')
                 # 2.发送请求,获取返回结果
-                post_data = 'verifyCode='+ info_input +'&personalName=cXE%3D&idNumber='+ num_id_ma +'&sessionKey=verifyCode&queryCodeHidden=cebpub'
+                post_data = 'verifyCode=' + info_input + '&personalName=cXE%3D&idNumber=' + num_id_ma + '&sessionKey=verifyCode&queryCodeHidden=cebpub'
                 print(post_data)
                 rt = session.post(get_url, data=post_data, headers=headers)
                 # print(rt.content.decode())
@@ -215,7 +216,7 @@ class GetPrice(object):
                 # print(text_dic)
                 # 判断获取结果：
                 code = text_dic['code']
-                if code =='40001':
+                if code == '40001':
                     print('验证码输入错误')
                     self.wb_info.sheets[8].range('E' + str(2 + j)).value = '验证码输入错误'
                 else:
@@ -1044,7 +1045,7 @@ class GetPrice(object):
         # 【【【【获取cookies】】】
         get_cookies = 0
         open_tes = False
-        if (open_tem and get_cookies ==0) or open_tes:
+        if (open_tem and get_cookies == 0) or open_tes:
             prefs = {"profile.managed_default_content_settings.images": 2}
             options.add_experimental_option("prefs", prefs)
 
@@ -1068,9 +1069,9 @@ class GetPrice(object):
         driver = webdriver.Chrome(options=options)
         driver.maximize_window()
         # driver.add_cookie(cookie_dic)
-        if get_cookies ==1:
+        if get_cookies == 1:
             while True:
-                tb_cookies  = driver.get_cookies()
+                tb_cookies = driver.get_cookies()
                 print(tb_cookies)
                 time.sleep(8)
         # return driver
@@ -1165,7 +1166,7 @@ class GetPrice(object):
 
     @common.use_times
     def main(self):
-        modes =1
+        modes = 1
         if modes == 1:
             self.limit_check()
         else:
