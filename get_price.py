@@ -1051,6 +1051,10 @@ class GetPrice(object):
             if use_num >= times:
                 break
 
+    def bug_fanliface(self):
+        pass
+
+
     def open_mark(self, cookies_oj=None, open_tem=None):
         options = Options()
         # open_tem = True

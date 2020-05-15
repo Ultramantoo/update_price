@@ -1,52 +1,49 @@
-import base64
-
 """"""
 
-id_number = '441621198704053017'
-str_en = base64.b64encode(id_number.encode('utf-8'))
-print(str_en)
-# 编码转换去（b'）
-print(str_en.decode("utf-8"))
+"""
+进入亚马逊返利
+1.进入  https://www.fanli.com/shop/amazonht
+2.登录跳转 https://fun.fanli.com/goshop/go?id=1733&lc=shopdetail_goumai&sign=8b4fc758&v=1589533573050
 
-
-
+--进入手机密码登录
+选：//input[@id='J_login_radio1']
+手机：//input[@id='J_login_user']   输入
+密码：//div[@id='J_login']//input[1]   输入
+点击登录 ：//a[@id='btn-login']
 
 """
-0.获取列表
-1.进入主页，获取验证码 打开 关闭 input
-2.发送请求,获取返回结果
-3.更新写入excel
-"""
+'''
+进入到亚逊
+登录：
+//a[@id='nav-link-yourAccount']
+
+//input[@id='ap_email']
+//input[@id='ap_password']
+
+//input[@id='signInSubmit']
 
 
-"""
-https://app.singlewindow.cn/ceb2pubweb/verifyCode/creator
-https://app.singlewindow.cn/ceb2pubweb/sw/personalAmount
-https://app.singlewindow.cn/ceb2pubweb/limit/outTotalAmount
-Request URL: 
-Request Method: POST
-Status Code: 200 OK
+搜索框 ：//input[@id='twotabsearchtextbox']
+点击搜索//div[@class='nav-search-submit nav-sprite']//input[@class='nav-input']
 
-1585849083387
-1585849772982
-1585849588.2548118
-"""
+获取标题列表：
+/html[1]/body[1]//div[1]/span[4]/div[1]//div[1]//h2[1]/a[1]/span[1]
+-------
 
-"""
-verifyCode=w23a&personalName=cXE%3D&idNumber=NDQxNjIxMTk4NzA0MDUzMDE3&sessionKey=verifyCode&queryCodeHidden=cebpub
-verifyCode=T4k9&personalName=cXE%3D&idNumber=NDQxNjIxMTk4NzA0MDUzMDE3&sessionKey=verifyCode&queryCodeHidden=cebpub
+获取价格列表：
+/html[1]/body[1]//div[2]/div[1]/span[4]//span[1]/span[2]/span[2]
+-----
+点击进入
 
-"""
+切换窗口
 
-"""
-{code: "0", total: 0, serviceTime: 1585474158307,…}
-code: "0"
-total: 0
-serviceTime: 1585474158307
-result: {innerbalance: 15920.34, totalAmount: 10079.66}
-innerbalance: 15920.34
-totalAmount: 10079.66
-operResult: false
-authLegalCheck: true
-success: true
-"""
+获取最低价： 点击  价格判断
+//a[@class='a-link-normal']//span[@class='a-color-price']
+
+加入购物车：
+/html[1]/body[1]//div[4]//div[1]//div[5]/div[1]//span[1]/input[1]
+
+进入结算中心：
+//a[@id='hlb-ptc-btn-native']
+
+'''
