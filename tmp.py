@@ -1,5 +1,10 @@
 """"""
 
+tt= '12345678'
+
+tt2= tt[::2]
+
+print(tt2)
 """
 进入亚马逊返利
 1.进入  https://www.fanli.com/shop/amazonht
@@ -11,6 +16,17 @@
 密码：//div[@id='J_login']//input[1]   输入
 点击登录 ：//a[@id='btn-login']
 
+
+//a[@id='nav-logobar-greeting']
+
+首页的 搜索框
+//input[@id='nav-search-keywords']
+
+//div[@class='nav-search-submit']//input[@class='nav-input']
+
+允许购买个数
+
+单次最大购买个数
 """
 '''
 进入到亚逊
@@ -45,5 +61,16 @@
 
 进入结算中心：
 //a[@id='hlb-ptc-btn-native']
+
+/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[1]/div[1]/span[1]
+
+/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]//div[1]/div[1]/span[1]
+
+/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[2]/div[1]/div[1]/span[1]
+
+/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/div[1]/form[1]/span[1]/span[1]/span[1]/input[1]
+/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/div[2]/div[2]/div[1]/form[1]/span[1]/span[1]/span[1]/input[1]
+/html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]//div[1]/div[2]/div[2]/div[1]/form[1]/span[1]/span[1]/span[1]/input[1]
+
 
 '''
