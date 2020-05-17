@@ -73,4 +73,10 @@ print(tt2)
 /html[1]/body[1]/div[1]/div[1]/div[2]/div[1]/div[1]//div[1]/div[2]/div[2]/div[1]/form[1]/span[1]/span[1]/span[1]/input[1]
 
 
+# 额度查询
+//input[@id='personalName']
+//input[@id='idNumber']
+//input[@id='inputCode']
+//input[@id='searchButton']
+//div[@id='surplus']
 '''

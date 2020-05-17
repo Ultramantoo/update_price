@@ -207,7 +207,6 @@ class GetPrice(object):
             num_id_ma = str_en.decode("utf-8")
             print(self.name_list[j])
             # print(num_id_ma)
-            # 1.进入主页，获取验证码 打开 关闭 input
             # 验证码请求
             while True:
                 timestamp = int(round(time.time() * 1000))
@@ -237,8 +236,53 @@ class GetPrice(object):
                 else:
                     innerbalance = text_dic['result']['innerbalance']
                     print(innerbalance)
-                    # 3.更新写入excel淦春
+                    # 3.更新写入excel
                     self.wb_info.sheets[8].range('E' + str(2 + j)).value = innerbalance
+                    break
+
+    def limit_check_el(self):
+        # 打开浏览器
+        driver_tb = self.open_mark(cookies_oj=None, open_tem=None, modes='PC')
+        # 进入网页
+        login_url = 'https://app.singlewindow.cn/ceb2pubweb/sw/personalAmount'
+        driver_tb.get(login_url)
+        # 循环填入处理
+        # 手动填入验证码
+        # 获取结果，错误处理
+        # 填入表，结果
+        for j, num_id in enumerate(self.id_number_list):
+            # 填入名
+            time.sleep(0.5)
+            driver_tb.implicitly_wait(15)
+            driver_tb.find_element_by_id("personalName").clear()
+            driver_tb.find_element_by_id("personalName").send_keys('test')
+            # 填入身份证
+            time.sleep(1)
+            driver_tb.implicitly_wait(15)
+            driver_tb.find_element_by_id("idNumber").clear()
+            driver_tb.find_element_by_id("idNumber").send_keys(num_id)
+            while True:
+                # 手动输入结果
+                info_input = input('输入验证码：')
+                # 填入身份证
+                time.sleep(0.5)
+                driver_tb.implicitly_wait(15)
+                driver_tb.find_element_by_id("inputCode").clear()
+                driver_tb.find_element_by_id("inputCode").send_keys(info_input)
+                # 点击获取：
+                time.sleep(1)
+                driver_tb.implicitly_wait(15)
+                driver_tb.find_element_by_id("searchButton").click()
+                # 获取结果
+                surplus_text = driver_tb.find_element_by_xpath("//div[@id='surplus']").text
+                if surplus_text == '' or surplus_text is None:
+                    pass
+                else:
+
+                    surplus_text = surplus_text.replace('元', '')
+                    # 写入结果
+                    print('%s号 [%s], 额度为：%s ' % (j+1, self.name_list[j], surplus_text))
+                    self.wb_info.sheets[8].range('E' + str(2 + j)).value = surplus_text
                     break
 
     # noinspection SpellCheckingInspection
@@ -1190,7 +1234,7 @@ class GetPrice(object):
         # 确认 支付方式 购买人名 身份证信息
         # sys.exit()
 
-    def open_mark(self, cookies_oj=None, open_tem=None):
+    def open_mark(self, cookies_oj=None, open_tem=None, modes=None):
         options = Options()
         # open_tem = True
         # 【【【【获取cookies】】】
@@ -1200,8 +1244,10 @@ class GetPrice(object):
             prefs = {"profile.managed_default_content_settings.images": 2}
             options.add_experimental_option("prefs", prefs)
 
-        mobile_emulation = {'deviceName': 'iPhone X'}
-        options.add_experimental_option('mobileEmulation', mobile_emulation)
+        if modes is None:
+            mobile_emulation = {'deviceName': 'iPhone X'}
+            options.add_experimental_option('mobileEmulation', mobile_emulation)
+
         options.add_argument('--ignore-certificate-errors')
         options.add_argument('--ignore-ssl-errors')
         # 设置多用户
@@ -1319,7 +1365,8 @@ class GetPrice(object):
     def main(self):
         modes = 1
         if modes == 1:
-            self.limit_check()
+            # self.limit_check()
+            self.limit_check_el()
         else:
             # sys.exit()
             # 3.爬取数据信息，分析数据
