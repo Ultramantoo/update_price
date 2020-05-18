@@ -79,4 +79,9 @@ print(tt2)
 //input[@id='inputCode']
 //input[@id='searchButton']
 //div[@id='surplus']
+
+
+/html[1]/body[1]/div[1]//div[9]/div[8]//div[1]/table[1]/tbody[1]/tr[1]/td[2]/span[1]
+/html[1]/body[1]/div[1]//div[9]/div[8]//div[1]/table[1]/tbody[1]/tr[1]/td[2]/span[1]
+
 '''

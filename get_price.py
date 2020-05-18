@@ -281,7 +281,7 @@ class GetPrice(object):
 
                     surplus_text = surplus_text.replace('元', '')
                     # 写入结果
-                    print('%s号 [%s], 额度为：%s ' % (j+1, self.name_list[j], surplus_text))
+                    print('%s号 [%s], 额度为：%s ' % (j + 1, self.name_list[j], surplus_text))
                     self.wb_info.sheets[8].range('E' + str(2 + j)).value = surplus_text
                     break
 
@@ -913,8 +913,9 @@ class GetPrice(object):
             # 获取最低价格
             time.sleep(1)
             driver.implicitly_wait(30)
-            # try:
-            now_price_tmp = driver.find_element_by_xpath("//span[@id='priceblock_ourprice']").text
+            # try: B07CRZK9BX //span[@class='priceBlockDealPriceString']
+            now_price_tmp = driver.find_element_by_xpath(
+                "/html[1]/body[1]/div[1]//div[9]/div[8]//div[1]/table[1]/tbody[1]/tr[1]/td[2]/span[1]").text
             now_price = "{:.2f}".format(float(now_price_tmp.replace('￥', "").replace(',', "").replace(' ', "")))
             print("当前显示价格为：%s" % now_price)
             # now_price = 10000
@@ -1363,7 +1364,7 @@ class GetPrice(object):
 
     @common.use_times
     def main(self):
-        modes = 1
+        modes = 0
         if modes == 1:
             # self.limit_check()
             self.limit_check_el()

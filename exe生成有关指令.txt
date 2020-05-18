@@ -25,7 +25,7 @@ pyinstaller -F -i tubiao\Funny24.ico -n order_plus-2.12 order_main.py
 pyinstaller -F -i tubiao\Funny24.ico -n send_orders-2.1 a05_other\a07_send_orders\send_orders.py
 pyinstaller -F -i tubiao\Funny24.ico -n deal_send-2.1 a05_other\a07_send_orders\deal_send.py
 # get_price
-pyinstaller -F -i tubiao\Funny24.ico -n get_price-1.281 get_price.py
+pyinstaller -F -i tubiao\Funny24.ico -n get_price-2.92 get_price.py
 
 笔记本
 pyinstaller -F -i tubiao\Funny24.ico -n order_plus-2.1 order_main.py
