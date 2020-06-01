@@ -316,7 +316,7 @@ def encrpt(word):
 
 # 过期检测：
 def deadline():
-    times = "2020/05/24 23:59:59"
+    times = "2020/08/24 23:59:59"
     out_time = datetime.datetime.strptime(times, "%Y/%m/%d %H:%M:%S")
     # print(out_time)
     plan_time = datetime.datetime.now()

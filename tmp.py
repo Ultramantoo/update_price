@@ -80,8 +80,37 @@ print(tt2)
 //input[@id='searchButton']
 //div[@id='surplus']
 
+/html[1]/body[1]/div[1]/div[2]/div[1]/div[9]/form[1]/div[1]//div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[2]/span[1]/span[1]
+/html[1]/body[1]/div[1]/div[2]/div[1]/div[9]/form[1]/div[1]//div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[1]/span[1]/span[1]
 
 /html[1]/body[1]/div[1]//div[9]/div[8]//div[1]/table[1]/tbody[1]/tr[1]/td[2]/span[1]
 /html[1]/body[1]/div[1]//div[9]/div[8]//div[1]/table[1]/tbody[1]/tr[1]/td[2]/span[1]
 
+/html[1]/body[1]/div[1]/div[2]/div[1]/div[9]/form[1]/div[1]/div[1]/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[2]/span[1]/span[1]/span[1]
+/html[1]/body[1]/div[1]/div[2]/div[1]/div[9]/form[1]/div[1]/div[6]/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[3]/span[1]/span[1]/span[1]
+
+
+
+//span[@class='a-size-small a-color-price sc-product-availability']
+
+//span[@class='a-size-small a-color-success sc-product-availability']
+a-size-small a-color-success sc-product-availability
+
+/html[1]/body[1]/div[1]/div[2]/div[1]/div[9]/form[1]/div[1]/div[46]/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[2]/span[1]/span[1]/span[1]
+
+# 状态
+/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]//div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[1]/span[1]/span[1]
+/html[1]/body[1]/div[1]/div[2]/div[1]/div[9]/form[1]/div[1]//div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[1]/span[1]/span[1]
+# 价钱
+//span[@class='a-size-base a-color-price sc-white-space-nowrap sc-product-price sc-price-sign']
+
+/html[1]/body[1]/div[1]/div[2]/div[1]/div[9]/form[1]/div[1]/div[6]/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[3]/span[1]/span[1]/span[1]
+/html[1]/body[1]/div[1]/div[2]/div[1]/div[9]/form[1]/div[1]//div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[3]/span[1]/span[1]/span[1]
+
+
+/html[1]/body[1]/div[1]/div[2]/div[1]/div[9]/form[1]/div[1]/div[5]/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[2]/span[1]/span[1]/span[1]
+/html[1]/body[1]/div[1]/div[2]/div[1]/div[9]/form[1]/div[1]/div[7]/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[3]/span[1]/span[1]/span[1]
 '''
+
+'/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]/div[6]/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[3]/span[1]/span[1]/span[1]'
+'/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]/div[6]/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[1]/span[1]/span[1]'

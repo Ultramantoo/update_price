@@ -778,9 +778,9 @@ class GetPrice(object):
                 if i[0] not in self.send_value_save_id:
                     send_info = i[1] + "，" + common.now_time('%H%M')
                     # 发邮件
-                    common.send_mail_tmp("13580595590@139.com", '13580595590@139.com', 'Qazqaz123', i[1])
+                    # common.send_mail_tmp("13580595590@139.com", '13580595590@139.com', 'Qazqaz123', i[1])
                     # 发微信
-                    self.server_sa('购，' + send_info)
+                    # self.server_sa('购，' + send_info)
                     # 发短信
                     print('需发送:【购物车提醒】：%s' % i[1])
                     # 记录已发送_id
@@ -1316,14 +1316,19 @@ class GetPrice(object):
     def get_mark(self, driver):
         title_list = []
         price_list = []
-        price_list_2 = []
+        statc_list = []
         goods_id_list = []
         title_list_oj = driver.find_elements_by_xpath(
             '/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]//div[4]/div[1]/div[1]/div[1]/div[2]/span[1]')
-        title_price_oj = driver.find_elements_by_xpath(
+        print(len(title_list_oj))
+        # title_price_oj = driver.find_elements_by_xpath(
+        #     '/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]//div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[1]/span[1]/span[1]')
+        # title_price_oj2 = driver.find_elements_by_xpath(
+        #     '/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]//div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[2]/span[1]/span[1]')
+        #
+        statc_oj = driver.find_elements_by_xpath(
             '/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]//div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[1]/span[1]/span[1]')
-        title_price_oj2 = driver.find_elements_by_xpath(
-            '/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]//div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[2]/span[1]/span[1]')
+        # print(len(statc_oj))
         goods_id = driver.find_elements_by_xpath('/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]/div')
         # print(len(title_list_oj))
         # print(len(title_price_oj2))
@@ -1332,26 +1337,46 @@ class GetPrice(object):
         # /html[1]/body[1]/div[1]/div[2]/div[1]/div[6]/form[1]/div[1]//div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[1]/span[1]/span[1]/span[1]
         for i, title in enumerate(title_list_oj):
             title_list.append(title.text)
-            price_list.append(title_price_oj[i].text)
-            goods_id_list.append(goods_id[i].get_attribute('data-asin'))
-        # print(title_list)
-        # 价格整理
-        # print(price_list)
-        for i, prices in enumerate(title_price_oj2):
-            price_list_2.append(prices.text)
-        # print(price_list_2)
-        price_list_2 = [i for i in price_list_2 if '￥' in i]
-        # print(price_list_2)
-        index_other = 0
-        # print(price_list)
-        for i, pri in enumerate(price_list):
-            # print(pri)
-            # print(index_other)
-            if '￥' in pri or '无货' in pri:
-                pass
+            # print(i)
+            if '无货' in statc_oj[i].text or '其他全新品' in statc_oj[i].text:
+                price_list.append('目前无货')
+                # /html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]/div[" + str(i) + "]/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[3]/span[1]/span[1]/span[1]
+            elif '电脑' in statc_oj[i].text:
+                path_a = '/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]/div[' + str(i + 1) + ']/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[2]/span[1]/span[1]'
+                # print(path_a)
+                prices = driver.find_element_by_xpath(path_a).text
+                price_list.append(prices)
             else:
-                price_list[i] = price_list_2[index_other]
-                index_other += 1
+                # print(i)
+                # print(goods_id[i])
+                prices = statc_oj[i].text
+                # print(prices)
+                price_list.append(prices)
+            statc_list.append(statc_oj[i].text)
+            goods_id_list.append(goods_id[i].get_attribute('data-asin'))
+        # #
+        # print(price_list)
+        # print(len(price_list))
+        # print(title_list)
+        # print(len(title_list))
+        # 价格整理
+        # print(statc_list)
+        # sys.exit()
+        # for i, prices in enumerate(title_price_oj2):
+        #     price_list_2.append(prices.text)
+        # # print(price_list_2)
+        # price_list_2 = [i for i in price_list_2 if '￥' in i]
+        # # print(price_list_2)
+        # index_other = 0
+        # # print(price_list)
+        # for i, pri in enumerate(price_list):
+        #     # print(pri)
+        #     # print(index_other)
+        #     if '￥' in pri or '无货' in pri:
+        #         pass
+        #     else:
+        #         price_list[i] = price_list_2[index_other]
+        #         index_other += 1
         # print(price_list)
         # print(goods_id_list)
         self.mark_info = [title_list, price_list, goods_id_list]
