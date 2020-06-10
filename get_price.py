@@ -743,7 +743,6 @@ class GetPrice(object):
                             field_value = "【非】推荐产品"
                         # 1. 不同品牌不同价的
                         # 1. 一般值3%~5% 40 70 比较值5%~10%  非常值 250> 10%
-
                     else:
                         # print('未录入，字段...')
                         pass
@@ -778,9 +777,9 @@ class GetPrice(object):
                 if i[0] not in self.send_value_save_id:
                     send_info = i[1] + "，" + common.now_time('%H%M')
                     # 发邮件
-                    # common.send_mail_tmp("13580595590@139.com", '13580595590@139.com', 'Qazqaz123', i[1])
+                    common.send_mail_tmp("13580595590@139.com", '13580595590@139.com', 'Qazqaz123', i[1])
                     # 发微信
-                    # self.server_sa('购，' + send_info)
+                    self.server_sa('购，' + send_info)
                     # 发短信
                     print('需发送:【购物车提醒】：%s' % i[1])
                     # 记录已发送_id
@@ -797,7 +796,6 @@ class GetPrice(object):
 
     def buy_goods(self, info_list_total):
         # 获取购买帐号列表
-        print('购买开始时间: %s' % common.now_time('%m-%d %T'))
         # print(bug_account_list)
         bug_account_list = [i for i in self.initial_table[7] if '是' in i[4]]
         # print(bug_account_list)
@@ -806,6 +804,7 @@ class GetPrice(object):
         # print(bug_goods_list)
         # print(len(bug_goods_list))
         if len(bug_goods_list) > 0:
+            print('购买开始时间: %s' % common.now_time('%m-%d %T'))
             for ik, account in enumerate(bug_account_list):
                 # 进入到购买
                 # 配置 cookies 帐号 密码 通信信息额度
@@ -821,11 +820,13 @@ class GetPrice(object):
                     old_price = "{:.2f}".format(float(bug_good[11].replace('￥ ', "").replace(',', "")))
                     print("记录价格：%s" % old_price)
                     # 每次个数
-                    every_one = int(5000 / float(old_price))
+                    every_one = int(3500 / float(old_price))
                     # print("每次个数：%s" % every_one)
                     get_max = 10
                     if every_one > get_max:
                         every_one = get_max
+                    elif every_one < 1:
+                        every_one = 1
                         # self.max_num = 8
                     print("真#每次个数：%s" % every_one)
                     # 购买链接：
@@ -922,7 +923,7 @@ class GetPrice(object):
             if float(old_price) + 2 >= float(now_price):
                 print("价格匹配")
                 time.sleep(1)
-                js = "var q=document.documentElement.scrollTop=240"
+                js = "var q=document.documentElement.scrollTop=320"
                 driver.execute_script(js)
                 time.sleep(1)
                 driver.implicitly_wait(30)
@@ -1341,8 +1342,9 @@ class GetPrice(object):
             if '无货' in statc_oj[i].text or '其他全新品' in statc_oj[i].text:
                 price_list.append('目前无货')
                 # /html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]/div[" + str(i) + "]/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[3]/span[1]/span[1]/span[1]
-            elif '电脑' in statc_oj[i].text:
-                path_a = '/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]/div[' + str(i + 1) + ']/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[2]/span[1]/span[1]'
+            elif '属于' in statc_oj[i].text:
+                path_a = '/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]/div[' + str(
+                    i + 1) + ']/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[2]/span[1]/span[1]'
                 # print(path_a)
                 prices = driver.find_element_by_xpath(path_a).text
                 price_list.append(prices)
@@ -1355,30 +1357,7 @@ class GetPrice(object):
             statc_list.append(statc_oj[i].text)
             goods_id_list.append(goods_id[i].get_attribute('data-asin'))
         # #
-        # print(price_list)
-        # print(len(price_list))
-        # print(title_list)
-        # print(len(title_list))
-        # 价格整理
-        # print(statc_list)
-        # sys.exit()
-        # for i, prices in enumerate(title_price_oj2):
-        #     price_list_2.append(prices.text)
-        # # print(price_list_2)
-        # price_list_2 = [i for i in price_list_2 if '￥' in i]
-        # # print(price_list_2)
-        # index_other = 0
-        # # print(price_list)
-        # for i, pri in enumerate(price_list):
-        #     # print(pri)
-        #     # print(index_other)
-        #     if '￥' in pri or '无货' in pri:
-        #         pass
-        #     else:
-        #         price_list[i] = price_list_2[index_other]
-        #         index_other += 1
-        # print(price_list)
-        # print(goods_id_list)
+
         self.mark_info = [title_list, price_list, goods_id_list]
 
     @staticmethod
