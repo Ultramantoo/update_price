@@ -674,9 +674,11 @@ class GetPrice(object):
                             field_value = 50000
                         elif '从' in data_article_price:
                             data_article_price = re.findall(r"从 (.+) 元", data_article_price)[0]
-                            field_value = "{:.2f}".format(float(data_article_price) * 1.091)
+                            # field_value = "{:.2f}".format(float(data_article_price) * 1.091)
+                            field_value = "{:.2f}".format(float(data_article_price) * 1.13)
                         else:
-                            field_value = "{:.2f}".format(float(data_article_price) * 1.091)
+                            # field_value = "{:.2f}".format(float(data_article_price) * 1.091)
+                            field_value = "{:.2f}".format(float(data_article_price) * 1.13)
                         # 2.非美完的处理
                     elif field in ["备注", "日期", "评价数|值数", "评价数", "值数", "上传人", "备注"]:
                         field_value = None
@@ -922,10 +924,10 @@ class GetPrice(object):
             # now_price = 10000
             if float(old_price) + 2 >= float(now_price):
                 print("价格匹配")
-                time.sleep(1)
+                time.sleep(1.5)
                 js = "var q=document.documentElement.scrollTop=320"
                 driver.execute_script(js)
-                time.sleep(1)
+                time.sleep(2)
                 driver.implicitly_wait(30)
                 driver.find_element_by_xpath(
                     "/html[1]/body[1]/div[1]//div[1]//form[1]/div[1]/span[1]/span[1]/input[1]").click()
