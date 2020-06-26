@@ -71,6 +71,7 @@ class GetPrice(object):
         self.field_dic_list = []
         self.initial_table = []
         self.send_value_save_id = []
+        self.bug_nums = 0
         # 购物车
         self.cookies_oj = [
             {'domain': '.amazon.cn', 'expiry': 2082729601.413418, 'httpOnly': False, 'name': 'x-wl-uid', 'path': '/',
@@ -674,11 +675,11 @@ class GetPrice(object):
                             field_value = 50000
                         elif '从' in data_article_price:
                             data_article_price = re.findall(r"从 (.+) 元", data_article_price)[0]
-                            # field_value = "{:.2f}".format(float(data_article_price) * 1.091)
-                            field_value = "{:.2f}".format(float(data_article_price) * 1.13)
+                            field_value = "{:.2f}".format(float(data_article_price) * 1.091)
+                            # field_value = "{:.2f}".format(float(data_article_price) * 1.13)
                         else:
-                            # field_value = "{:.2f}".format(float(data_article_price) * 1.091)
-                            field_value = "{:.2f}".format(float(data_article_price) * 1.13)
+                            field_value = "{:.2f}".format(float(data_article_price) * 1.091)
+                            # field_value = "{:.2f}".format(float(data_article_price) * 1.13)
                         # 2.非美完的处理
                     elif field in ["备注", "日期", "评价数|值数", "评价数", "值数", "上传人", "备注"]:
                         field_value = None
@@ -868,20 +869,20 @@ class GetPrice(object):
         else:
             self.bug_fanliface(driver)
 
-        time.sleep(0.5)
+        time.sleep(0.3)
         driver.implicitly_wait(15)
         # driver.find_element_by_id("ap_email_login").clear()
         driver.find_element_by_id("ap_email_login").send_keys(account[0])
-        time.sleep(0.8)
+        time.sleep(0.3)
         driver.implicitly_wait(15)
         driver.find_element_by_xpath("//span[@id='continue']//input[@id='continue']").click()
-        time.sleep(0.5)
+        time.sleep(0.3)
         driver.implicitly_wait(15)
         # driver.find_element_by_id("ap_password").clear()
         driver.find_element_by_id("ap_password").send_keys(account[1])
-        time.sleep(0.5)
+        time.sleep(0.3)
         driver.implicitly_wait(15)
-        time.sleep(0.5)
+        time.sleep(0.3)
         driver.implicitly_wait(15)
         driver.find_element_by_xpath("//input[@id='signInSubmit']").click()
 
@@ -903,7 +904,7 @@ class GetPrice(object):
                 driver.implicitly_wait(15)
                 # driver.find_element_by_id("ap_email_login").clear()
                 driver.find_element_by_xpath("//input[@id='nav-search-keywords']").send_keys(bug_good[18])
-                time.sleep(1)
+                time.sleep(0.5)
                 driver.implicitly_wait(15)
                 # driver.find_element_by_id("ap_email_login").clear() //span[@id='nav-searchbar-button']//span//input
                 driver.find_element_by_xpath("//span[@id='nav-searchbar-button']//span//input").click()
@@ -914,7 +915,7 @@ class GetPrice(object):
                     "//div[@class='a-section a-spacing-none a-text-center s-list-image-container']//img[@class='s-image']").click()
             # 价格匹配
             # 获取最低价格
-            time.sleep(1)
+            time.sleep(0.5)
             driver.implicitly_wait(30)
             # try: B07CRZK9BX //span[@class='priceBlockDealPriceString']
             now_price_tmp = driver.find_element_by_xpath(
@@ -924,15 +925,19 @@ class GetPrice(object):
             # now_price = 10000
             if float(old_price) + 2 >= float(now_price):
                 print("价格匹配")
-                time.sleep(1.5)
-                js = "var q=document.documentElement.scrollTop=320"
+                time.sleep(0.4)
+                js = "var q=document.documentElement.scrollETop=200"
                 driver.execute_script(js)
-                time.sleep(2)
+                time.sleep(0.4)
+                js = "var q=document.documentElement.scrollETop=270"
+                driver.execute_script(js)
+                time.sleep(0.8)
                 driver.implicitly_wait(30)
                 driver.find_element_by_xpath(
                     "/html[1]/body[1]/div[1]//div[1]//form[1]/div[1]/span[1]/span[1]/input[1]").click()
-                time.sleep(1)
+                # time.sleep(1)
             else:
+                time.sleep(0.4)
                 print('当前价不匹配，查找最低价')
                 now_price_tmp = driver.find_element_by_xpath(
                     "//div[@class='olp-text-box']//span[@class='a-color-price']").text
@@ -941,8 +946,8 @@ class GetPrice(object):
                 if float(old_price) + 2 >= float(now_price):
                     print("价格匹配")
                 # 加入内
-                time.sleep(1)
-                driver.implicitly_wait(30)
+                time.sleep(0.4)
+                driver.implicitly_wait(15)
                 driver.find_element_by_xpath("//div[@class='olp-text-box']//span[@class='a-color-price']").click()
                 # 加入购物车 //span[@id='a-autoid-0']//input[@name='submit.addToCart']
                 # 判断最小价格商品
@@ -963,21 +968,22 @@ class GetPrice(object):
                         time.sleep(1)
                         pricet.click()
                         break
-                time.sleep(1)
+                time.sleep(0.6)
                 driver.implicitly_wait(30)
                 driver.find_element_by_xpath(
                     "//div[@class='a-container olpSecondaryPage activeSecondaryPage']//input[@name='submit.addToCart']").click()
             # 设置购买个数
-            # 判断最大可购买个数
-            time.sleep(1.5)
-            driver.implicitly_wait(30)
-            driver.find_element_by_xpath("//a[@class='a-size-medium a-link-normal']").click()
-            time.sleep(0.5)
-            driver.implicitly_wait(30)
-            driver.find_element_by_xpath("//li[9]//span[1]//a[1]").click()
-            time.sleep(2)
-            bug_nums = driver.find_element_by_xpath("//a[@class='a-size-medium a-link-normal']").text
-            #
+            # 判断最大可购买个数 【最大购买只判断一次】
+            if self.bug_nums == 0:
+                time.sleep(1)
+                driver.implicitly_wait(30)
+                driver.find_element_by_xpath("//a[@class='a-size-medium a-link-normal']").click()
+                time.sleep(0.5)
+                driver.implicitly_wait(30)
+                driver.find_element_by_xpath("//li[9]//span[1]//a[1]").click()
+                time.sleep(1)
+                self.bug_nums = driver.find_element_by_xpath("//a[@class='a-size-medium a-link-normal']").text
+                print("最大可购买个数为：%s" % self.bug_nums)
             # time.sleep(1.5)
             # driver.implicitly_wait(30)
             # 选项列表 /html[1]/body[1]/div[7]/div[1]/div[2]/ul[1]//a[1]
@@ -985,7 +991,7 @@ class GetPrice(object):
             # 判断 可先个数
             # 总数 每次最多的数 次数
             if use_num == 0:
-                self.max_num = int(bug_nums)
+                self.max_num = int(self.bug_nums)
                 # self.max_num = 2
                 if self.max_num > 9:
                     self.max_num = 10
@@ -1008,17 +1014,17 @@ class GetPrice(object):
                 every_one_true = yu_num
             # option_list[(every_one_true - 1)].click()
             # 设置当前需购买个数
-            if int(bug_nums) != int(every_one_true):
+            if int(self.bug_nums) != int(every_one_true):
                 driver.find_element_by_xpath("//a[@class='a-size-medium a-link-normal']").click()
                 time.sleep(0.5)
                 driver.implicitly_wait(30)
                 driver.find_element_by_xpath("//li[" + str(every_one_true) + "]//span[1]//a[1]").click()
-                time.sleep(2)
+            time.sleep(0.5)
             # 进入结算中心 //button[@id='a-autoid-1-announce']//div[@class='sc-without-fresh']
             driver.implicitly_wait(30)
             # driver.find_element_by_xpath("//input[@id='buy-now-button']").click()
             driver.find_element_by_xpath("//div[@id='sc-mini-buy-box']//div[@class='sc-without-fresh']").click()
-            time.sleep(1)
+            time.sleep(0.5)
             # sys.exit()
             """
             # 判断身份证信息是否正确
@@ -1030,12 +1036,68 @@ class GetPrice(object):
             # 获取当前帐号 购买人列表
             goods_ren_list = self.id_name[account[0]]
             print("购买人列表：%s" % goods_ren_list)
+            # 发送地址的确认:
+            try:
+                time.sleep(0.3)
+                driver.implicitly_wait(3)
+                driver.find_element_by_xpath("//span[@id='a-autoid-0']//span[@class='a-button-inner']").click()
+                time.sleep(0.3)
+                driver.implicitly_wait(5)
+                driver.find_element_by_xpath("//form[1]/span[1]/span[1]//input[@class='a-button-input']").click()
+                time.sleep(0.3)
+                driver.implicitly_wait(5)
+                driver.find_element_by_xpath(
+                    "//form[1]/div[1]/div[4]/div[2]/div[2]/div[1]/div[1]/div[1]/div[1]").click()
+                time.sleep(0.3)
+                driver.implicitly_wait(5)
+                driver.find_element_by_xpath("//form[1]/div[1]/div[1]/span[1]/span[1]/input[1]").click()
+                # 身份证设置：
+                try:
+                    print('身份证设置')
+                    time.sleep(0.5)
+                    driver.implicitly_wait(3)
+                    driver.find_element_by_xpath(
+                        "//form[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/span[1]/span[1]/span[1]").click()
+                    time.sleep(0.5)
+                    driver.implicitly_wait(3)
+                    print('选择目标身份证')
+                    # 选择目标身份证
+                    id_list_y = driver.find_elements_by_xpath("/html[1]/body[1]//div[1]/div[2]/ul[1]//a[1]")
+                    # print(len(id_list_y))
+                    id_list_test_y = [i.text for i in id_list_y]
+                    print('身份列表:%s' % id_list_test_y)
+                    # id 位置
+                    index_ids = None
+                    for ids, id_list in enumerate(id_list_test_y):
+                        if goods_ren_list[0] in id_list:
+                            index_ids = ids
+                            break
+                    if index_ids is None:
+                        print("当前帐号身份无")
+                        return "帐号地址无"
+                    id_list_y[index_ids].click()
+                    time.sleep(0.5)
+                    driver.implicitly_wait(5)
+                    driver.find_element_by_xpath("//form[1]/div[1]/div[1]/div[4]/span[1]/span[1]").click()
+                except Exception:
+                    print('无需身份证设置...')
+            except Exception:
+                print('无需重设发送地址...')
+            # 勾选默认地址
+            try:
+                time.sleep(0.5)
+                driver.implicitly_wait(3)
+                driver.find_element_by_xpath(
+                    "//form[1]/div[1]/div[4]/div[1]/div[1]/div[1]/div[1]/label[1]/i[1]").click()
+            except Exception:
+                print('无需重设默认地址...')
+            time.sleep(0.5)
             driver.implicitly_wait(30)
             name_user_x = driver.find_element_by_xpath(
                 "//div[@id='shipping-summary']//li[@class='displayAddressLI displayAddressFullName']")
             name_user = name_user_x.text
             name_user_text_x = driver.find_element_by_xpath(
-                "/html[1]/body[1]//div[1]/div[1]/div[1]/form[1]/div[1]/div[7]/div[1]/a[2]/div[1]/span[1]")
+                "//form[1]/div[1]//div[1]/a[2]/div[1]/span[1]")
             name_user_text = name_user_text_x.text
             name_user_id = name_user_text[7:11]
             name_user_m = False
@@ -1097,7 +1159,7 @@ class GetPrice(object):
                 # 选正确的帐号
                 # 选择位置，确认位置
                 name_add_list_x = driver.find_elements_by_xpath(
-                    '/html[1]/body[1]//div[1]/div[1]/div[1]/div[2]/form[1]/div[1]/div[1]//div[1]/span[1]/div[1]/label[1]/span[1]/div[1]/ul[1]/li[1]/b[1]')
+                    '//form[1]/div[1]/div[1]//div[1]/span[1]/div[1]/label[1]/span[1]/div[1]/ul[1]/li[1]/b[1]')
                 sure_list_x = driver.find_elements_by_xpath("//span/a[contains(text(),'送货到该地址')]")
                 # /html[1]/body[1]/div[6]/div[1]/div[1]/div[1]/div[2]/form[1]/div[1]/div[1]//div[1]/span[1]/div[1]/label[1]/span[1]/div[1]/ul[1]/li[1]/b[1]
                 # //span/a[contains(text(),'送货到该地址')]
@@ -1171,7 +1233,7 @@ class GetPrice(object):
             # 判断身份证息信是否正确
             # 判断是否需要重复下单
             time.sleep(0.3)
-            driver.implicitly_wait(8)
+            driver.implicitly_wait(3)
             try:
                 driver.find_element_by_xpath("//input[@name='forcePlaceOrder']").click()
                 time.sleep(1)
@@ -1180,7 +1242,6 @@ class GetPrice(object):
             # //input[@name='forcePlaceOrder']
             #  //input[@name='forcePlaceOrder']
             # 判断能购买的个数。 再判断需买买的次数
-            # if use_num >= 2: break
             if use_num >= times:
                 break
             # fanli_goto_url = 'https://fun.fanli.com/goshop/go?id=1733&lc=shopdetail_goumai&sign=8b4fc758&v=1589533573050'
@@ -1189,12 +1250,6 @@ class GetPrice(object):
             else:
                 fanli_goto_url = 'https://fun.fanli.com/goshop/go?id=1733&lc=shopdetail_goumai&sign=8b4fc758&v=1589533573050'
                 driver.get(fanli_goto_url)
-            # time.sleep(0.5)
-            # driver.implicitly_wait(15)
-            # driver.find_element_by_xpath("//i[@class='a-icon a-nav-cart a-align-middle']").click()
-            # time.sleep(0.5)
-            # driver.implicitly_wait(15)
-            # driver.find_element_by_xpath("//div[@id='nav-ftr-auth']//a[@class='nav-a']").click()
 
     @staticmethod
     def bug_fanliface(driver):
@@ -1370,7 +1425,7 @@ class GetPrice(object):
 
     @common.use_times
     def main(self):
-        modes = 0
+        modes = 1
         if modes == 1:
             # self.limit_check()
             self.limit_check_el()
