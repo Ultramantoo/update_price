@@ -5,6 +5,10 @@ tt= '12345678'
 tt2= tt[::2]
 
 print(tt2)
+
+sss = '001'
+print(sss)
+print(int(sss))
 """
 进入亚马逊返利
 1.进入  https://www.fanli.com/shop/amazonht
