@@ -672,7 +672,7 @@ class GetPrice(object):
                     elif field == "到手价格":
                         # 1.判断是否无货
                         data_article_price = data_article_price.replace('￥ ', "").replace(',', "").replace('。', "")
-                        if '无货' in data_article_price or '内置硬盘' in data_article_price:
+                        if '无货' in data_article_price or '内置硬盘' in data_article_price or '不再提供这个商品' in data_article_price:
                             field_value = 50000
                         elif '从' in data_article_price:
                             data_article_price = re.findall(r"从 (.+) 元", data_article_price)[0]
@@ -780,10 +780,11 @@ class GetPrice(object):
             for i in send_value_list:
                 if i[0] not in self.send_value_save_id:
                     send_info = i[1] + "，" + common.now_time('%H%M')
-                    # 发邮件
-                    # common.send_mail_tmp("13580595590@139.com", '13580595590@139.com', 'Qazqaz123', i[1])
-                    # 发微信
-                    # self.server_sa('购，' + send_info)
+                    if self.initial_table[0][17][5] == '是':
+                        # 发邮件
+                        common.send_mail_tmp("13580595590@139.com", '13580595590@139.com', 'Qazqaz123', i[1])
+                        # 发微信
+                        self.server_sa('购，' + send_info)
                     # 发短信
                     print('需发送:【购物车提醒】：%s' % i[1])
                     # 记录已发送_id
@@ -996,6 +997,9 @@ class GetPrice(object):
                 driver.implicitly_wait(30)
                 self.bug_nums = driver.find_element_by_xpath("//a[@class='a-size-medium a-link-normal']").text
                 now_bug_nums = self.bug_nums
+                bug_lot = self.initial_table[0][19][5].split('|')
+                if int(bug_lot[1])<int(now_bug_nums):
+                    if bug_lot[0] =='是': self.bug_nums = int(bug_lot[1])
                 print("最大可购买个数为：%s" % self.bug_nums)
             else:
                 time.sleep(1)
@@ -1047,8 +1051,16 @@ class GetPrice(object):
             # driver.find_element_by_xpath("//input[@id='buy-now-button']").click()
             # //button[@id='a-autoid-0-announce']//div[@class='sc-without-fresh']
             # /html[1]/body[1]/div[1]/div[2]/div[1]/div[4]/div[1]
-            driver.find_element_by_xpath("/html[1]/body[1]/div[1]/div[2]/div[1]/div[4]/div[1]").click()
+            driver.find_element_by_xpath("/html[1]/body[1]/div[1]/div[2]/div[1]/div[4]//div[1]").click()
             # sys.exit()
+            #授权
+            try:
+                time.sleep(1)
+                driver.implicitly_wait(3)
+                driver.find_element_by_xpath(
+                    "//div[6]/div[2]/div[1]/div[3]/div[1]/span[1]/span[1]").click()
+            except Exception:
+                print('无需再次授权...')
             """
             # 判断身份证信息是否正确
             # 判断购买人的额度是否满足，不满足
@@ -1061,28 +1073,36 @@ class GetPrice(object):
             print("购买人列表：%s" % goods_ren_list)
             # 发送地址的确认:
             try:
-                time.sleep(0.8)
+                time.sleep(1.5)
                 driver.implicitly_wait(3)
                 driver.find_element_by_xpath("//span[@id='a-autoid-0']//span[@class='a-button-inner']").click()
-                time.sleep(0.3)
+                time.sleep(0.8)
                 driver.implicitly_wait(5)
                 driver.find_element_by_xpath("//form[1]/span[1]/span[1]//input[@class='a-button-input']").click()
-                time.sleep(0.3)
+                time.sleep(0.7)
                 driver.implicitly_wait(5)
                 driver.find_element_by_xpath(
                     "//form[1]/div[1]/div[4]/div[2]/div[2]/div[1]/div[1]/div[1]/div[1]").click()
-                time.sleep(0.3)
+                time.sleep(0.7)
                 driver.implicitly_wait(5)
                 driver.find_element_by_xpath("//form[1]/div[1]/div[1]/span[1]/span[1]/input[1]").click()
                 # 身份证设置：
                 try:
                     print('身份证设置')
-                    time.sleep(0.5)
-                    driver.implicitly_wait(3)
+                    try:
+                        time.sleep(2.3)
+                        driver.implicitly_wait(15)
+                        driver.find_element_by_xpath(
+                            "//form[1]//label[1]/i[1]").click()
+                    except Exception as e:
+                        print(e)
+                        print('无需初次身份证设置...')
+                    time.sleep(1.1)
+                    driver.implicitly_wait(15)
                     driver.find_element_by_xpath(
                         "//form[1]/div[1]/div[1]/div[2]/div[1]/div[2]/div[1]/div[1]/div[1]/div[1]/span[1]/span[1]/span[1]").click()
-                    time.sleep(0.5)
-                    driver.implicitly_wait(3)
+                    time.sleep(1)
+                    driver.implicitly_wait(15)
                     print('选择目标身份证')
                     # 选择目标身份证
                     id_list_y = driver.find_elements_by_xpath("/html[1]/body[1]//div[1]/div[2]/ul[1]//a[1]")
@@ -1102,9 +1122,11 @@ class GetPrice(object):
                     time.sleep(1)
                     driver.implicitly_wait(5)
                     driver.find_element_by_xpath("//form[1]/div[1]/div[1]/div[4]/span[1]/span[1]").click()
-                except Exception:
+                except Exception as e:
+                    print(e)
                     print('无需身份证设置...')
-            except Exception:
+            except Exception as e:
+                print(e)
                 print('无需重设发送地址...')
             # 勾选默认地址
             try:
@@ -1207,7 +1229,16 @@ class GetPrice(object):
                 else:
                     print("当前帐号地址无")
                     return "帐号地址无"
+                # 勾选默认地址
+                try:
+                    time.sleep(0.7)
+                    driver.implicitly_wait(3)
+                    driver.find_element_by_xpath(
+                        "//form[1]/div[1]/div[4]/div[1]/div[1]/div[1]/div[1]/label[1]/i[1]").click()
+                except Exception:
+                    print('无需重设默认地址...')
             # 选择人id
+            # name_user_id_true = "3017"
             if name_user_id_true in name_user_id:
                 name_user_id_m = True
             if not name_user_id_m:
@@ -1225,10 +1256,11 @@ class GetPrice(object):
                 id_list_x = driver.find_elements_by_xpath("/html[1]/body[1]//div[1]/div[2]/ul[1]//a[1]")
                 # print(id_list_x)
                 id_list_test_x = [i.text for i in id_list_x]
-                print('身份列表:%s' % id_list_test_x)
+                print('身份列表2:%s' % id_list_test_x)
                 # id 位置
                 index_ids = None
                 for ids, id_list in enumerate(id_list_test_x):
+                    # name_user_true = '张燕锋' # 设置固态id 身份id
                     if name_user_true in id_list:
                         index_ids = ids
                         break
@@ -1239,6 +1271,7 @@ class GetPrice(object):
                 # /html[1]/body[1]/div[12]/div[1]/div[2]/ul[1]//a[1]  列表
                 time.sleep(1)
                 driver.implicitly_wait(8)
+                print('确认身份列')
                 driver.find_element_by_xpath("//input[@class='a-button-input']").click()
                 # //input[@class='a-button-input']
                 # 送货方式

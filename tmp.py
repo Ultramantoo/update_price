@@ -118,3 +118,10 @@ a-size-small a-color-success sc-product-availability
 
 '/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]/div[6]/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[3]/span[1]/span[1]/span[1]'
 '/html[1]/body[1]/div[1]/div[2]/div[1]//form[1]/div[1]/div[6]/div[4]/div[1]/div[1]/div[1]/div[2]/ul[1]/li[1]/span[1]/span[1]'
+
+"""
+/html[1]/body[1]/div[1]/div[2]/div[1]/div[4]//div[1]
+/html[1]/body[1]/div[1]/div[2]/div[1]/div[4]/span[1]/span[1]/button[1]/div[1]
+
+
+"""
